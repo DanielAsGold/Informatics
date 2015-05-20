@@ -3,6 +3,7 @@ SeasonStat = function(SeasonStart,SeasonEnd, clim){
 
   spring=aggregate(subset(clim, month >= SeasonStart & month <= SeasonEnd),list(year=spring$year), mean)
   MeanMaxTemp=mean(spring$tmax) 
+  # test comment
   MeanMinTemp=mean(spring$tmin) 
   MinTempYr=spring[which(spring[,2]==min(spring[,2])), 1] 
   MaxPrecipYr=spring[which(spring[,4]==max(spring[,4])), 1] 
