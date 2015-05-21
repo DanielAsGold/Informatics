@@ -24,8 +24,10 @@ spring.summary = function(clim, spring.months = c(4:6)) {
   spring = subset(clim, clim$month %in% spring.months)
 
   #compute values
-  mean.springT = mean(c(spring$tmax, spring$tmin))
-  lowyear = spring$year[which.min(spring$tavg)]
+  mean.springT = mean(spring$tavg) #computes the mean daily average temp in spring months
+  mean.springT=round(mean.springT,2) #Rounds my answer to two decimal places
+  AgTemp=aggregate(spring$tavg, by=list(spring$year), mean)
+  lowyear = AgTemp$year[which.min(AgTemp)] #identifies 
   
   spring.precip = aggregate(spring$tmax, by=list(spring$year), sum)
 	
