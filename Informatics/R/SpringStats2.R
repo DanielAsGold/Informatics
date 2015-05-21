@@ -16,6 +16,7 @@ spring.summary = function(clim, spring.months = c(4:6), Interval="m") {
     Coldyear=aggregate(ColdYear$tavg,by=list(ColdYear$year),mean) #aggregate tavg by finding the mean value for each year
     RainYear=subset(spring,spring$year==WettestSpring, select=c(year,rain))#subset to show only the year with most precip
     RainYear=aggregate(RainYear$rain,by=list(RainYear$year),sum)#aggregate monthly precip data into total precip for each year. 
+    colnames(ColdYear)=c("Year","Tavg")
   }
   
   if(Interval=="m"){
@@ -23,11 +24,13 @@ spring.summary = function(clim, spring.months = c(4:6), Interval="m") {
     ColdYear=aggregate(ColdYear$tavg,by=list(ColdYear$month, ColdYear$year),mean)
     RainYear=subset(spring,spring$year==WettestSpring, select=c(year,month,rain))
     RainYear=aggregate(RainYear$rain,by=list(RainYear$month,RainYear$year),sum)
+    colnames(ColdYear)=c("month","Year","Tavg")
 }
 
 if(Interval=="d"){
   ColdYear=subset(spring,spring$year==lowyear, select=c(year,month,day,tavg))#subset "spring" so that the "year" is equal to the year with lowest spring temp
   RainYear=subset(spring,spring$year==WettestSpring, select=c(year,month,day,rain))
+  colnames(ColdYear)=c("day","month","Year","Tavg")
 }
 return(list(ColdYear,RainYear))
 }
