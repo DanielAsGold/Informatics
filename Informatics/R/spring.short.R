@@ -1,8 +1,7 @@
+#A function that creates a summary of data collected in the spring months
 
-#' Summary information about spring climate
-#'
 #' computes summary information about spring temperature and precipitation
-#' @param clim.data  data frame with columns tmax, tmin (C)
+#' @param clim  data frame with columns tmax, tmin (C)
 #'	rain (precip in mm), year, month (integer), day
 #' @param months (as integer) to include in spring; default 4,5,6
 #' @return returns a list containing, mean spring temperature (mean.springT, (C))
@@ -10,19 +9,19 @@
 #' mean spring precipitation (mean.springP (mm))
 #' spring (as year) with highest precip (wettest.spring (year))
 
-spring.summary = function(clim.data, spring.months = c(4:6)) {
+spring.summary = function(clim, spring.months = c(4:6)) {
   
   # check to make sure data is in required format
   requiredcols = c("tmax","tmin","year","month","rain")
-  tmp = sapply(requiredcols, match, colnames(clim.data), nomatch=0)
+  tmp = sapply(requiredcols, match, colnames(clim), nomatch=0)
   if (min(tmp)==0) {
       return("Error:Invalid Climate Input") }
-  if (min(clim.data$rain < 0)) {
+  if (min(clim$rain < 0)) {
     return("Error:Invalid Climate Input") }
 
-  #extract spring data
-  clim.data$tavg = (clim.data$tmin + clim.data$tmax)/2.0
-  spring = subset(clim.data, clim.data$month %in% spring.months)
+  #extract spring data and add a column on the table which is average daily temperature
+  clim$tavg = (clim$tmin + clim$tmax)/2.0
+  spring = subset(clim, clim$month %in% spring.months)
 
   #compute values
   mean.springT = mean(c(spring$tmax, spring$tmin))
