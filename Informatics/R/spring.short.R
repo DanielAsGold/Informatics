@@ -12,17 +12,27 @@
 
 spring.summary = function(clim.data, spring.months = c(4:6)) {
   
+  # check to make sure data is in required format
+  requiredcols = c("tmax","tmin","year","month","rain")
+  tmp = sapply(requiredcols, match, colnames(clim.data), nomatch=0)
+  if (min(tmp)==0) {
+      return("Error:Invalid Climate Input") }
+  if (min(clim.data$rain < 0)) {
+    return("Error:Invalid Climate Input") }
+
+  #extract spring data
+  clim.data$tavg = (clim.data$tmin + clim.data$tmax)/2.0
   spring = subset(clim.data, clim.data$month %in% spring.months)
+
+  #compute values
   mean.springT = mean(c(spring$tmax, spring$tmin))
-  lowyear = spring$year[which.min(spring$tmin)]
-  spring.precip = as.data.frame(matrix(nrow=unique(spring$year), ncol=2))
-  colnames(spring.precip)=c("precip","year")
+  lowyear = spring$year[which.min(spring$tavg)]
   
-  spring.precip = aggregate(spring$rain, by=list(spring$year), sum)
+  spring.precip = aggregate(spring$tmax, by=list(spring$year), sum)
 	
   
   colnames(spring.precip) = c("year","precip")  
-mean.spring.precip = mean(spring.precip$precip)
+  mean.spring.precip = mean(spring.precip$precip)
   wettest.spring = spring.precip$year[which.max(spring.precip$precip)]
   
   return(list(mean.springT = mean.springT, coldest.spring=lowyear, 
